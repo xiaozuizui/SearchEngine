@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Spider
 {
-    class Request
+    public class Request
     {
 
         public Request(string uri)
@@ -18,14 +18,21 @@ namespace Spider
            // webRequest = new HttpWebRequest();
         }
 
-        public async void GenerateWebRequest()
+        public async void GenerateWebRequest(int i,)
         {
             webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
             webRequest.Method = "GET";
             webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
             ContentStream = webResponse.GetResponseStream();
-
+            
         }
+
+        public string GetContent()
+        {
+
+            return new StreamReader(ContentStream).ReadToEnd();
+        }
+
         string RequestUri { get; set; }
 
         private HttpWebResponse webResponse;

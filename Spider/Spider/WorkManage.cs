@@ -15,12 +15,23 @@ namespace Spider
         List<string> finisheduri;
         List<string> unfinisheduri;
 
+        public WorkManage(int requestcount)
+        {
+            RequestCount = requestcount;
+            for(int i = 0;i<RequestCount;i++)
+                WorkBusy[i] = false;
+        }
         void RunTask()
         {
-            for(int i=0;i<RequestCount;i++)
+            while(true)
             {
-                GenerateWork(i);
+                for (int i = 0; i < RequestCount; i++)
+                {
+                    if(!WorkBusy[i])
+                        GenerateWork(i);
+                }
             }
+           
 
         }
         void GenerateWork(int i)
@@ -32,7 +43,8 @@ namespace Spider
             finisheduri.Add(uri);
 
             Request request = new Request(uri);
-
+            request.GenerateWebRequest(i);
+            
         }
     }
 }
