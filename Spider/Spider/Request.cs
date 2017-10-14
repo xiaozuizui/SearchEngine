@@ -18,13 +18,14 @@ namespace Spider
            // webRequest = new HttpWebRequest();
         }
 
-        public async void GenerateWebRequest(int i,)
+        public async void GenerateWebRequest(int i,WorkManage wm)
         {
             webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
             webRequest.Method = "GET";
             webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
             ContentStream = webResponse.GetResponseStream();
-            
+
+            wm.WorkBusy[i] = false;
         }
 
         public string GetContent()

@@ -7,19 +7,25 @@ using Spider;
 
 namespace Spider
 {
-    class WorkManage
+    public class WorkManage
     {
         int RequestCount { get; set; } //并行工作数量
         bool [] IsFinished { get; set; }
-        bool [] WorkBusy { get; set; }
-        List<string> finisheduri;
-        List<string> unfinisheduri;
+        public bool [] WorkBusy { get; set; }
+        public Dictionary<string,int> finisheduri { get; set; }
+        public Dictionary<string,int> unfinisheduri { get; set; }
 
-        public WorkManage(int requestcount)
+        public int depth { get; set; }
+
+        public WorkManage(int requestcount,int depth,string baseuri)
         {
             RequestCount = requestcount;
             for(int i = 0;i<RequestCount;i++)
                 WorkBusy[i] = false;
+            this.depth = depth;
+            finisheduri = new Dictionary<string,int>();
+            unfinisheduri = new Dictionary<string, int>();
+            finisheduri.Add(baseuri, 1);
         }
         void RunTask()
         {
@@ -38,12 +44,13 @@ namespace Spider
         {
             WorkBusy[i] = true;
 
-            string uri = unfinisheduri.First();
+            string uri = unfinisheduri.First().Key;
+            int depth = unfinisheduri.First().Value;
             unfinisheduri.Remove(uri);
-            finisheduri.Add(uri);
+            finisheduri.Add(uri,depth);
 
             Request request = new Request(uri);
-            request.GenerateWebRequest(i);
+            request.GenerateWebRequest(i,this);
             
         }
     }
