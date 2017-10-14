@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Lucene.Net;
 namespace Web
 {
-    public class Class1
+    class IndexWriter
     {
 
     }
