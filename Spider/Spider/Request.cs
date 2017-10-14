@@ -18,14 +18,23 @@ namespace Spider
            // webRequest = new HttpWebRequest();
         }
 
-        public async void GenerateWebRequest(int i,WorkManage wm)
+        public async void GenerateWebRequest(int i,WorkManage wm,int depth)
         {
             webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
             webRequest.Method = "GET";
             webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
             ContentStream = webResponse.GetResponseStream();
+            GetLinks getLinks = new GetLinks(this.GetContent());
 
+            wm.DictionaryLock = true;
+            foreach(string uri in getLinks.GetUris())
+            {
+                if(!wm.unfinisheduri.ContainsKey(uri))
+                    wm.unfinisheduri.Add(uri, depth + 1);
+            }
+            wm.DictionaryLock = false;
             wm.WorkBusy[i] = false;
+            wm.RunTask();
         }
 
         public string GetContent()

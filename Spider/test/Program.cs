@@ -12,11 +12,10 @@ namespace test
         static void Main(string[] args)
         {
 
+            
             string uri = "http://www.dlut.edu.cn/";
-            Request re = new Request(uri);
-            re.GenerateWebRequest();
-            System.Console.ReadLine();
-            string s = re.GetContent();
+            WorkManage wm = new WorkManage(4, 4, uri);
+            wm.RunTask();
         }
     }
 }
