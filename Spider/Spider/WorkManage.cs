@@ -20,6 +20,7 @@ namespace Spider
 
         public WorkManage(int requestcount,int depth,string baseuri)
         {
+            DictionaryLock = false;
             RequestCount = requestcount;
             WorkBusy = new bool[requestcount];
             for(int i = 0;i<RequestCount;i++)
@@ -31,18 +32,18 @@ namespace Spider
         }
         public void RunTask()
         {
-            while(true)
+            while(!isFinished())
             {
+                
                 for (int i = 0; i < RequestCount; i++)
                 {
-                    if(!WorkBusy[i])
+                    if (!WorkBusy[i])
                         GenerateWork(i);
                 }
+                
             }
-           
-
         }
-        void GenerateWork(int i)
+        async void  GenerateWork(int i)
         {
          
             if(unfinisheduri.Count!=0&&DictionaryLock==false)
@@ -52,20 +53,46 @@ namespace Spider
                 int depth = unfinisheduri.First().Value;
                 unfinisheduri.Remove(uri);
 
-                if(!finisheduri.ContainsKey(uri))
+                if (!finisheduri.ContainsKey(uri))
                 {
                     finisheduri.Add(uri, depth);
                     if (depth <= Depth)
                     {
                         Request request = new Request(uri);
-                        request.GenerateWebRequest(i, this, depth);
+                        await request.GenerateWebRequest(this, depth);
+                        WorkBusy[i] = false;
+                        System.Console.WriteLine(finisheduri.Count);
+                        //   RunTask();
                     }
+                    else
+                    {
+                        WorkBusy[i] = false;
+                    }
+                 
+                    
                 }
-                
-
+                else
+                {
+                    WorkBusy[i] = false;
+                  //  RunTask();
+                }
             }
+        }
 
 
+        bool isFinished()
+        {
+            if (unfinisheduri.Count != 0)
+                return false;
+            else
+            {
+                for(int i =0; i<RequestCount;i++)
+                {
+                    if (WorkBusy[i])
+                        return false;
+                }
+                return true;
+            }
         }
     }
 }
