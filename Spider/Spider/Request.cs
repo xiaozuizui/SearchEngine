@@ -25,6 +25,7 @@ namespace Spider
             try
             {
                 webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
+                
                 ContentStream = webResponse.GetResponseStream();
                 GetLinks getLinks = new GetLinks(this.GetContent());
 
@@ -40,7 +41,7 @@ namespace Spider
             }
             catch
             {
-                System.Console.WriteLine("!!");
+                System.Console.WriteLine("request fail"+RequestUri);
                 
             }
            
@@ -49,7 +50,6 @@ namespace Spider
 
         public string GetContent()
         {
-
             return new StreamReader(ContentStream).ReadToEnd();
         }
 

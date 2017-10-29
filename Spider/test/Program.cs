@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Spider;
+using System.Threading;
 
 namespace test
 {
@@ -12,10 +13,30 @@ namespace test
         static void Main(string[] args)
         {
 
-            
+
             string uri = "http://www.dlut.edu.cn/";
-            WorkManage wm = new WorkManage(4, 2, uri);
-            wm.RunTask();
+            WorkManage wm = new WorkManage(4, 4, uri);
+
+
+           //Thread.Sleep(5000);
+        
+
+            while (true)
+            {
+                wm.RunTask();
+                 //if (wm.isFinished())
+                    
+
+            }
+
+
+            //
         }
+            
+
+            
+               
+           
+        
     }
 }
