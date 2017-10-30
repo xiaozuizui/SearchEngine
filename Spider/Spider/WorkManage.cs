@@ -16,7 +16,7 @@ namespace Spider
         public Dictionary<string,int> unfinisheduri { get; set; }
         public bool DictionaryLock { get; set; }
         public int Depth { get; set; }
-        public int number { get; set; }
+        public int []number { get; set; }
         public bool workStatue { get; set; }
         public WorkManage(int requestcount,int depth,string baseuri)
         {
@@ -29,7 +29,7 @@ namespace Spider
             finisheduri = new Dictionary<string,int>();
             unfinisheduri = new Dictionary<string, int>();
             unfinisheduri.Add(baseuri, 1);
-            number = 1;
+            number = new int[] { 0, 0, 0, 0 };
             workStatue = false;
         }
         public void RunTask()
@@ -69,12 +69,13 @@ namespace Spider
                     
                     if (depth <= Depth)
                     {
+                        System.Console.WriteLine(number[i] + "   " + uri);
                         finisheduri.Add(uri, depth);
                         Request request = new Request(uri);
                         await request.GenerateWebRequest(this, depth);
                         WorkBusy[i] = false;
-                        number += 1;
-                        System.Console.WriteLine(number+"   "+ uri);
+                        number[i] += 1;
+                        
                         // WorkBusy[i] = false;
                         //   RunTask();
                     }

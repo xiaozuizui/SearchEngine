@@ -15,7 +15,7 @@ namespace test
 
 
             string uri = "http://www.dlut.edu.cn/";
-            WorkManage wm = new WorkManage(4, 4, uri);
+            WorkManage wm = new WorkManage(4, 3, uri);
 
 
            //Thread.Sleep(5000);
