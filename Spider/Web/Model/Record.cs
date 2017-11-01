@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Web.Model
 {
-    class Article
+    class Record
     {
         
         public string Id
@@ -26,6 +26,10 @@ namespace Web.Model
             set;
             get;
         }
+        public string AddTime { get;  set; }
+        public string Uri { get; set; }
+
+      
 
 
     }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Spider;
 using System.Threading;
+using Web;
 
 namespace test
 {
@@ -18,16 +19,11 @@ namespace test
             WorkManage wm = new WorkManage(4, 3, uri);
 
 
-           //Thread.Sleep(5000);
-        
+            //Thread.Sleep(5000);
 
-            while (true)
-            {
-                wm.RunTask();
-                 //if (wm.isFinished())
-                    
-
-            }
+            IndexManager im = new IndexManager();
+            //im.CreatIndex(true);
+            im.SearchIndex("null");
 
 
             //
