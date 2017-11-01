@@ -101,12 +101,12 @@ namespace Web
             {
                 //title = GetKeyWordsSplitBySpace(Request.Form["title"].ToString());
 
-                //QueryParser parseTitle = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Title", pgAnalyzer);
-                //parseTitle.DefaultOperator = QueryParser.Operator.OR;
-                //Query queryT = parseTitle.Parse(GetKeyWordsSplitBySpace(st));
-                //bQuery.Add(queryT, Occur.MUST);
+                QueryParser parseTitle = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Title", pgAnalyzer);
+                parseTitle.DefaultOperator = QueryParser.Operator.OR;
+                Query queryT = parseTitle.Parse(GetKeyWordsSplitBySpace(st));
+                bQuery.Add(queryT, Occur.MUST);
 
-               
+
                 QueryParser parseContent = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Content", pgAnalyzer);
                 parseContent.DefaultOperator = QueryParser.Operator.OR ;
                 Query queryC = parseContent.Parse(GetKeyWordsSplitBySpace(st));
