@@ -55,7 +55,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="IndexWriter.cs" />
     <Compile Include="Model\Record.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

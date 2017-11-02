@@ -30,6 +30,7 @@ namespace Web
 
         private int PageIndex = 1;
         private int PageSize = 10;
+        private IndexWriter writer;
         protected Analyzer pgAnalyzer
         {
             get { return new PanGuAnalyzer(); }
@@ -41,9 +42,15 @@ namespace Web
                 return @"~/Index";
             }
         }
-        public IndexManager()
+        public IndexManager(bool isCreate)
         {
-
+            if (!System.IO.Directory.Exists(IndexDic))
+            {
+                System.IO.Directory.CreateDirectory(IndexDic);
+                // Lucene.Net.Store.Directory dd =  Lucene.Net.Store
+            }
+            Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
+            writer =  new IndexWriter(ad, pgAnalyzer, isCreate, Lucene.Net.Index.IndexWriter.MaxFieldLength.LIMITED);
             //PerFieldAnalyzerWrapper wap = new PerFieldAnalyzerWrapper(new  Lucene.Net.Analysis.Standard.StandardAnalyzer());
             // wap
         }
@@ -52,17 +59,12 @@ namespace Web
         {
             //创建索引目录
 
-            if (!System.IO.Directory.Exists(IndexDic))
-            {
-                System.IO.Directory.CreateDirectory(IndexDic);
-                // Lucene.Net.Store.Directory dd =  Lucene.Net.Store
-            }
-            Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
+            
             //IndexWriter第三个参数:true指重新创建索引,false指从当前索引追加....此处为新建索引所以为true
-            IndexWriter writer = new IndexWriter(ad, pgAnalyzer, isCreate, Lucene.Net.Index.IndexWriter.MaxFieldLength.LIMITED);
+           // IndexWriter writer = 
             for (int i = 1; i < 150; i++)
             {
-                AddIndex(writer, "嘴嘴" + i.ToString(), "null", DateTime.Now.ToString(), "www.sss");
+              //  AddIndex(writer, "嘴嘴" + i.ToString(), "null", DateTime.Now.ToString(), "www.sss");
             }
             writer.Optimize();
             writer.Dispose();
@@ -70,9 +72,14 @@ namespace Web
             //Response.End();
         }
 
+        public void SaveIndex()
+        {
+            writer.Optimize();
+            writer.Dispose();
+        }
 
 
-        private void AddIndex(IndexWriter writer, string title, string content, string date, string uri)
+        public void AddIndex(string title, string content, string date, string uri)
         {
             try
             {
@@ -101,10 +108,10 @@ namespace Web
             {
                 //title = GetKeyWordsSplitBySpace(Request.Form["title"].ToString());
 
-                QueryParser parseTitle = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Title", pgAnalyzer);
-                parseTitle.DefaultOperator = QueryParser.Operator.OR;
-                Query queryT = parseTitle.Parse(GetKeyWordsSplitBySpace(st));
-                bQuery.Add(queryT, Occur.MUST);
+                //QueryParser parseTitle = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Title", pgAnalyzer);
+                //parseTitle.DefaultOperator = QueryParser.Operator.OR;
+                //Query queryT = parseTitle.Parse(GetKeyWordsSplitBySpace(st));
+                //bQuery.Add(queryT, Occur.MUST);
 
 
                 QueryParser parseContent = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Content", pgAnalyzer);
@@ -158,6 +165,8 @@ namespace Web
                             AddTime = doc.Get("AddTime").ToString(),
                             Uri = doc.Get("Uri").ToString()
                         };
+
+                        Console.WriteLine(model.Title +"    "+model.Uri);
                     returnA.Add(model);
                     //list.Add(SetHighlighter(dicKeywords, model));
                     }

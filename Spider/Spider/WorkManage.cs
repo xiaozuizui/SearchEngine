@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Spider;
+using Web;
+using StanSoft;
+
 
 namespace Spider
 {
@@ -18,6 +21,7 @@ namespace Spider
         public int Depth { get; set; }
         public int []number { get; set; }
         public bool workStatue { get; set; }
+        public IndexManager manager;
         public WorkManage(int requestcount,int depth,string baseuri)
         {
             DictionaryLock = false;
@@ -31,6 +35,10 @@ namespace Spider
             unfinisheduri.Add(baseuri, 1);
             number = new int[] { 0, 0, 0, 0 };
             workStatue = false;
+            manager = new IndexManager(true);
+            
+
+            
         }
         public void RunTask()
         {
@@ -41,13 +49,8 @@ namespace Spider
 
                     GenerateWork(i);
                 }
-                
             
             
-            
-
-
-
         }
         async Task  GenerateWork(int i)
         {
@@ -59,7 +62,6 @@ namespace Spider
                 string uri = unfinisheduri.First().Key;
                 int depth = unfinisheduri.First().Value;
                 
-              
                 unfinisheduri.Remove(uri);
            
                 DictionaryLock = false;
@@ -72,10 +74,9 @@ namespace Spider
                         System.Console.WriteLine(number[i] + "   " + uri);
                         finisheduri.Add(uri, depth);
                         Request request = new Request(uri);
-                        await request.GenerateWebRequest(this, depth);
+                        await request.GenerateWebRequest(this, depth,manager);
                         WorkBusy[i] = false;
                         number[i] += 1;
-                        
                         // WorkBusy[i] = false;
                         //   RunTask();
                     }
@@ -89,10 +90,7 @@ namespace Spider
                 {
                     WorkBusy[i] = false;
                 }
-                
             }
-            
-           
         }
 
 

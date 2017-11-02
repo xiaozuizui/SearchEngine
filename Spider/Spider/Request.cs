@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.IO;
-
+using StanSoft;
+using Web;
 namespace Spider
 {
     public class Request
@@ -18,16 +19,30 @@ namespace Spider
            // webRequest = new HttpWebRequest();
         }
 
-        public async Task GenerateWebRequest(WorkManage wm,int depth)
+        public async Task GenerateWebRequest(WorkManage wm,int depth,IndexManager indexmanager)
         {
             webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
             webRequest.Method = "GET";
             try
             {
+
+          
                 webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
                 
                 ContentStream = webResponse.GetResponseStream();
-                GetLinks getLinks = new GetLinks(this.GetContent());
+                
+
+                string html = GetContent();
+                GetLinks getLinks = new GetLinks(html);
+
+                Article article = new Article();
+                Html2Article.AppendMode = false;
+                Html2Article.Depth = 80;
+                article = Html2Article.GetArticle(html);
+               
+                //Article article = Html2Article.GetArticle(GetContent());
+
+                indexmanager.AddIndex(article.Title, article.Content, DateTime.Now.ToString(), RequestUri);
 
                 wm.DictionaryLock = true;
                 foreach (string uri in getLinks.GetUris())
