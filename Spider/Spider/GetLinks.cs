@@ -20,8 +20,10 @@ namespace Spider
 
         public List<string> GetUris()
         {
-           // string p = @"http://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?";
-            Regex rg = new Regex(@"http://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?", RegexOptions.IgnoreCase);
+            // string p = @"http://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?";
+            //(https ?| ftp | file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]
+            Regex rg = new Regex(@"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]", RegexOptions.IgnoreCase);
+            //Regex rg = new Regex(@"http://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?", RegexOptions.IgnoreCase);
             MatchCollection match = rg.Matches(webContent);
             for(int i=0;i<match.Count;i++)
             {

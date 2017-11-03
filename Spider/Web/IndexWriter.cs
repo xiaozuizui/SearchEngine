@@ -28,31 +28,34 @@ namespace Web
         //public static readonly IndexManager bookIndex = new IndexManager();
         // public static readonly string indexPath = HttpContext.Current.Server.MapPath("~/IndexData");
 
-        private int PageIndex = 1;
-        private int PageSize = 10;
+        //private int PageIndex = 1;
+        //private int PageSize = 10;
         private IndexWriter writer;
         protected Analyzer pgAnalyzer
         {
             get { return new PanGuAnalyzer(); }
         }
-        protected string IndexDic
+        //protected string IndexDic { get; set; }
+        protected Lucene.Net.Store.Directory Lu_IndexDic { get; set; }
+            
+        
+        public IndexManager(string IndexDic = @"../index")
         {
-            get
-            {
-                return @"~/Index";
-            }
-        }
-        public IndexManager(bool isCreate)
-        {
+            
             if (!System.IO.Directory.Exists(IndexDic))
             {
                 System.IO.Directory.CreateDirectory(IndexDic);
                 // Lucene.Net.Store.Directory dd =  Lucene.Net.Store
             }
-            Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
-            writer =  new IndexWriter(ad, pgAnalyzer, isCreate, Lucene.Net.Index.IndexWriter.MaxFieldLength.LIMITED);
+            Lu_IndexDic = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
+            
             //PerFieldAnalyzerWrapper wap = new PerFieldAnalyzerWrapper(new  Lucene.Net.Analysis.Standard.StandardAnalyzer());
             // wap
+        }
+
+        public void SetIndexWriter(bool isCreate)
+        {
+            writer = new IndexWriter(Lu_IndexDic, pgAnalyzer, isCreate, Lucene.Net.Index.IndexWriter.MaxFieldLength.LIMITED);
         }
 
         public void CreatIndex(bool isCreate)
@@ -100,7 +103,7 @@ namespace Web
             }
         }
 
-        public void SearchIndex(string st)
+        public void SearchIndex(string st,Page pg)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             BooleanQuery bQuery = new BooleanQuery();
@@ -135,19 +138,19 @@ namespace Web
             //}
             if (bQuery != null && bQuery.GetClauses().Length > 0)
             {
-                GetSearchResult(bQuery, dic);
+                GetSearchResult(bQuery, dic,pg);
             }
         }
 
-        private void GetSearchResult(BooleanQuery bQuery, Dictionary<string, string> dicKeywords)
+        private void GetSearchResult(BooleanQuery bQuery, Dictionary<string, string> dicKeywords,Page pg)
         {
             List<Record> returnA = new List<Record>();
-            Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
-            IndexSearcher search = new IndexSearcher(ad, true);
+            //Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
+            IndexSearcher search = new IndexSearcher(Lu_IndexDic, true);
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             Sort sort = new Sort(new SortField("Title", SortField.DOC, true));
-            TopDocs docs = search.Search(bQuery, (Filter)null, PageSize * PageIndex, sort);
+            TopDocs docs = search.Search(bQuery, (Filter)null, pg.PageSize * pg.PageIndex, sort);
             stopwatch.Stop();
             if (docs != null && docs.TotalHits > 0)
             {
@@ -155,7 +158,7 @@ namespace Web
                 //txtPageFoot = GetPageFoot(PageIndex, PageSize, docs.totalHits, "sabrosus");
                 for (int i = 0; i < docs.TotalHits; i++)
                 {
-                    if (i >= (PageIndex - 1) * PageSize && i < PageIndex * PageSize)
+                    if (i >= (pg.PageIndex - 1) * pg.PageSize && i < pg.PageIndex * pg.PageSize)
                     {
                         Document doc = search.Doc(docs.ScoreDocs[i].Doc);
                         Record model = new Record()
@@ -330,6 +333,12 @@ namespace Web
             Insert,
             Modify,
             Delete
+        }
+
+        public class Page
+        {
+            public int PageSize { get; set; }
+            public int PageIndex { get; set; }
         }
     }
 

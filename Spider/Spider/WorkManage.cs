@@ -40,7 +40,7 @@ namespace Spider
             unfinisheduri.Add(baseuri, 1);
             number = new int[] { 0,0,0,0};
             workStatue = false;
-            manager = new IndexManager(true);
+            manager = new IndexManager();
             
 
             
@@ -58,6 +58,13 @@ namespace Spider
             }
             
             
+            
+        }
+
+        public void SearchRequest()
+        {
+            unfinisheduri = request;
+            request.Clear();
         }
         async Task  GenerateWork(int i)
         {

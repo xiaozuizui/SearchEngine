@@ -27,21 +27,15 @@ namespace Spider
             try
             {
 
-          
                 webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
-                
                 ContentStream = webResponse.GetResponseStream();
-                
-
                 string html = GetContent();
                 GetLinks getLinks = new GetLinks(html);
-
                 Article article = new Article();
                 Html2Article.AppendMode = false;
                 Html2Article.Depth = 80;
                 article = Html2Article.GetArticle(html);
-               
-                //Article article = Html2Article.GetArticle(GetContent());
+         
 
                 indexmanager.AddIndex(article.Title, article.Content, DateTime.Now.ToString(), RequestUri);
 
