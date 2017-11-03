@@ -17,17 +17,19 @@ namespace test
 
 
             string uri = "http://www.dlut.edu.cn/";
-            WorkManage wm = new WorkManage(4, 2, uri);
+            WorkManage wm = new WorkManage(4, 3, uri);
 
-            while(!wm.isFinished())
-            {
+            
+            
                 wm.RunTask();
-                Thread.Sleep(100);
-            }
+            //    Thread.Sleep(100);
+
+            int sum = wm.number.Sum();
+            Console.WriteLine("SUM = " + sum.ToString());
 
             wm.manager.SaveIndex();
 
-             Thread.Sleep(5000);
+             //Thread.Sleep(5000);
 
             Console.WriteLine("doen");
             while (true)

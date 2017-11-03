@@ -109,13 +109,13 @@ namespace Web
                 //title = GetKeyWordsSplitBySpace(Request.Form["title"].ToString());
 
                 //QueryParser parseTitle = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Title", pgAnalyzer);
-                //parseTitle.DefaultOperator = QueryParser.Operator.OR;
+                //parseTitle.DefaultOperator = QueryParser.Operator.AND;
                 //Query queryT = parseTitle.Parse(GetKeyWordsSplitBySpace(st));
                 //bQuery.Add(queryT, Occur.MUST);
 
 
                 QueryParser parseContent = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Content", pgAnalyzer);
-                parseContent.DefaultOperator = QueryParser.Operator.OR ;
+                parseContent.DefaultOperator = QueryParser.Operator.OR;
                 Query queryC = parseContent.Parse(GetKeyWordsSplitBySpace(st));
                 bQuery.Add(queryC, Occur.MUST);
 
@@ -146,7 +146,7 @@ namespace Web
             IndexSearcher search = new IndexSearcher(ad, true);
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            Sort sort = new Sort(new SortField("AddTime", SortField.DOC, true));
+            Sort sort = new Sort(new SortField("Title", SortField.DOC, true));
             TopDocs docs = search.Search(bQuery, (Filter)null, PageSize * PageIndex, sort);
             stopwatch.Stop();
             if (docs != null && docs.TotalHits > 0)

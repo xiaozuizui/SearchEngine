@@ -17,23 +17,28 @@ namespace Spider
         public bool [] WorkBusy { get; set; }
         public Dictionary<string,int> finisheduri { get; set; }
         public Dictionary<string,int> unfinisheduri { get; set; }
+        public Dictionary<string,int> request { get; set; }
         public bool DictionaryLock { get; set; }
         public int Depth { get; set; }
-        public int []number { get; set; }
+        public int [] number { get; set; }
         public bool workStatue { get; set; }
         public IndexManager manager;
         public WorkManage(int requestcount,int depth,string baseuri)
         {
             DictionaryLock = false;
+
             RequestCount = requestcount;
             WorkBusy = new bool[requestcount];
             for(int i = 0;i<RequestCount;i++)
                 WorkBusy[i] = false;
+
             Depth = depth;
             finisheduri = new Dictionary<string,int>();
             unfinisheduri = new Dictionary<string, int>();
+            request = new Dictionary<string, int>();
+
             unfinisheduri.Add(baseuri, 1);
-            number = new int[] { 0, 0, 0, 0 };
+            number = new int[] { 0,0,0,0};
             workStatue = false;
             manager = new IndexManager(true);
             
@@ -43,12 +48,14 @@ namespace Spider
         public void RunTask()
         {
 
-
+            while (!isFinished())
+            {
                 for (int i = 0; i < RequestCount; i++)
                 {
 
                     GenerateWork(i);
                 }
+            }
             
             
         }
@@ -72,11 +79,12 @@ namespace Spider
                     if (depth <= Depth)
                     {
                         System.Console.WriteLine(number[i] + "   " + uri);
+                        number[i] += 1;
                         finisheduri.Add(uri, depth);
                         Request request = new Request(uri);
                         await request.GenerateWebRequest(this, depth,manager);
                         WorkBusy[i] = false;
-                        number[i] += 1;
+                     
                         // WorkBusy[i] = false;
                         //   RunTask();
                     }

@@ -23,6 +23,7 @@ namespace Spider
         {
             webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
             webRequest.Method = "GET";
+            //webRequest.Timeout = 100;
             try
             {
 
@@ -44,19 +45,25 @@ namespace Spider
 
                 indexmanager.AddIndex(article.Title, article.Content, DateTime.Now.ToString(), RequestUri);
 
-                wm.DictionaryLock = true;
-                foreach (string uri in getLinks.GetUris())
+                
+                if (depth < wm.Depth)
                 {
-                    if (!wm.unfinisheduri.ContainsKey(uri))
-                        wm.unfinisheduri.Add(uri, depth + 1);
-                }
 
-                wm.DictionaryLock = false;
+                    wm.DictionaryLock = true;
+                    foreach (string uri in getLinks.GetUris())
+                    {
+                        if (!wm.unfinisheduri.ContainsKey(uri))
+                            wm.unfinisheduri.Add(uri, depth + 1);
+                    }
+                    wm.DictionaryLock = false;
+                }
+                
                 
             }
             catch
             {
-                System.Console.WriteLine("request fail"+RequestUri);
+                wm.request.Add(RequestUri, depth);
+             //   System.Console.WriteLine("request fail "+RequestUri);
                 
             }
            
