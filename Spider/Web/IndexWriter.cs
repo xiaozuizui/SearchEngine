@@ -48,7 +48,8 @@ namespace Web
                 // Lucene.Net.Store.Directory dd =  Lucene.Net.Store
             }
             Lu_IndexDic = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
-            
+
+            SetIndexWriter(true);
             //PerFieldAnalyzerWrapper wap = new PerFieldAnalyzerWrapper(new  Lucene.Net.Analysis.Standard.StandardAnalyzer());
             // wap
         }
@@ -58,38 +59,24 @@ namespace Web
             writer = new IndexWriter(Lu_IndexDic, pgAnalyzer, isCreate, Lucene.Net.Index.IndexWriter.MaxFieldLength.LIMITED);
         }
 
-        public void CreatIndex(bool isCreate)
-        {
-            //创建索引目录
-
-            
-            //IndexWriter第三个参数:true指重新创建索引,false指从当前索引追加....此处为新建索引所以为true
-           // IndexWriter writer = 
-            for (int i = 1; i < 150; i++)
-            {
-              //  AddIndex(writer, "嘴嘴" + i.ToString(), "null", DateTime.Now.ToString(), "www.sss");
-            }
-            writer.Optimize();
-            writer.Dispose();
-            //Response.Write("<script type='text/javascript'>alert('创建索引成功');window.location=window.location;</script>");
-            //Response.End();
-        }
+       
 
         public void SaveIndex()
         {
-            writer.Optimize();
+            //writer.Optimize();
+          
             writer.Dispose();
         }
 
 
-        public void AddIndex(string title, string content, string date, string uri)
+        public void AddIndex(string title, string content, string uri)
         {
             try
             {
                 Document doc = new Document();
                 doc.Add(new Field("Title", title, Field.Store.YES, Field.Index.ANALYZED));//存储且索引
                 doc.Add(new Field("Content", content, Field.Store.YES, Field.Index.ANALYZED));//存储且索引
-                doc.Add(new Field("AddTime", date, Field.Store.YES, Field.Index.NOT_ANALYZED));//存储且索引
+                //doc.Add(new Field("AddTime", date, Field.Store.YES, Field.Index.NOT_ANALYZED));//存储且索引
                 doc.Add(new Field("Uri", uri, Field.Store.YES, Field.Index.NOT_ANALYZED));
                 writer.AddDocument(doc);
             }
@@ -165,7 +152,7 @@ namespace Web
                         {
                             Title = doc.Get("Title").ToString(),
                             Content = doc.Get("Content").ToString(),
-                            AddTime = doc.Get("AddTime").ToString(),
+                           // AddTime = doc.Get("AddTime").ToString(),
                             Uri = doc.Get("Uri").ToString()
                         };
 
@@ -337,6 +324,11 @@ namespace Web
 
         public class Page
         {
+            public Page(int size,int index)
+            {
+                PageSize = size;
+                PageIndex = index;
+            }
             public int PageSize { get; set; }
             public int PageIndex { get; set; }
         }

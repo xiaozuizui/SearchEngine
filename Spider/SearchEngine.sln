@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spider", "Spider\Spider.csproj", "{B4B0254B-211C-484D-8310-48292C6A1142}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{37FF7061-00EE-47A5-B82A-4462F881BABE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webUI", "webUI\webUI.csproj", "{CF058F85-1CD6-4EEB-8772-B3907BC60930}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Html2Article", "Html2Article\Html2Article.csproj", "{0EDCFCDB-08FC-43AE-B6BB-BAF8D6EDF61E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CF058F85-1CD6-4EEB-8772-B3907BC60930}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF058F85-1CD6-4EEB-8772-B3907BC60930}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF058F85-1CD6-4EEB-8772-B3907BC60930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDCFCDB-08FC-43AE-B6BB-BAF8D6EDF61E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDCFCDB-08FC-43AE-B6BB-BAF8D6EDF61E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDCFCDB-08FC-43AE-B6BB-BAF8D6EDF61E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDCFCDB-08FC-43AE-B6BB-BAF8D6EDF61E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

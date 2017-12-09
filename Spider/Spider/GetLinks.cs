@@ -12,6 +12,7 @@ namespace Spider
         public  string webContent { get; set; }
 
         public List<string> Links { get; set; }
+
         public GetLinks(string content)
         {
             webContent = content;
