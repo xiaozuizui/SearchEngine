@@ -59,8 +59,8 @@ namespace Spider
 
             //unfinisheduri.Add(baseuri, 1);
             
-            manager = new IndexManager();
-            
+            manager = new IndexManager("./index");
+            manager.SetIndexWriter(true);
 
             
         }

@@ -7,10 +7,10 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace SC_LuceneNet {
+namespace SearchApp {
     
     
-    public partial class _Default {
+    public partial class MainWindow {
         
         /// <summary>
         /// form1 控件。

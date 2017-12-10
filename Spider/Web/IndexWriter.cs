@@ -38,10 +38,8 @@ namespace Web
         //protected string IndexDic { get; set; }
         protected Lucene.Net.Store.Directory Lu_IndexDic { get; set; }
             
-        
-        public IndexManager(string IndexDic = @"./index")
+        public IndexManager(string  IndexDic)
         {
-            
             if (!System.IO.Directory.Exists(IndexDic))
             {
                 System.IO.Directory.CreateDirectory(IndexDic);
@@ -49,11 +47,9 @@ namespace Web
                 // Lucene.Net.Store.Directory dd =  Lucene.Net.Store
             }
             Lu_IndexDic = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
-
-            SetIndexWriter(true);
-            //PerFieldAnalyzerWrapper wap = new PerFieldAnalyzerWrapper(new  Lucene.Net.Analysis.Standard.StandardAnalyzer());
-            // wap
         }
+
+       
 
         public void SetIndexWriter(bool isCreate)
         {
@@ -91,7 +87,7 @@ namespace Web
             }
         }
 
-        public void SearchIndex(string st,Page pg, ref string re)
+        public void  SearchIndex(string st,Page pg, ref string re)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             BooleanQuery bQuery = new BooleanQuery();
