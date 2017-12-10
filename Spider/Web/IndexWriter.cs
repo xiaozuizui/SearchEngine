@@ -39,12 +39,13 @@ namespace Web
         protected Lucene.Net.Store.Directory Lu_IndexDic { get; set; }
             
         
-        public IndexManager(string IndexDic = @"../index")
+        public IndexManager(string IndexDic = @"./index")
         {
             
             if (!System.IO.Directory.Exists(IndexDic))
             {
                 System.IO.Directory.CreateDirectory(IndexDic);
+                System.Console.WriteLine(IndexDic);
                 // Lucene.Net.Store.Directory dd =  Lucene.Net.Store
             }
             Lu_IndexDic = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
@@ -90,7 +91,7 @@ namespace Web
             }
         }
 
-        public void SearchIndex(string st,Page pg)
+        public void SearchIndex(string st,Page pg, ref string re)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             BooleanQuery bQuery = new BooleanQuery();
@@ -105,8 +106,9 @@ namespace Web
 
 
                 QueryParser parseContent = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, "Content", pgAnalyzer);
-                parseContent.DefaultOperator = QueryParser.Operator.OR;
-                Query queryC = parseContent.Parse(GetKeyWordsSplitBySpace(st));
+                parseContent.DefaultOperator = QueryParser.Operator.AND;
+               // Query queryC = parseContent.Parse(GetKeyWordsSplitBySpace(st));
+                Query queryC = parseContent.Parse(st);
                 bQuery.Add(queryC, Occur.MUST);
 
 
@@ -125,11 +127,11 @@ namespace Web
             //}
             if (bQuery != null && bQuery.GetClauses().Length > 0)
             {
-                GetSearchResult(bQuery, dic,pg);
+                GetSearchResult(bQuery, dic,pg,ref re);
             }
         }
 
-        private void GetSearchResult(BooleanQuery bQuery, Dictionary<string, string> dicKeywords,Page pg)
+        private void GetSearchResult(BooleanQuery bQuery, Dictionary<string, string> dicKeywords,Page pg,ref string re)
         {
             List<Record> returnA = new List<Record>();
             //Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
@@ -155,7 +157,7 @@ namespace Web
                            // AddTime = doc.Get("AddTime").ToString(),
                             Uri = doc.Get("Uri").ToString()
                         };
-
+                        re += model.Title + "    " + model.Uri;
                         Console.WriteLine(model.Title +"    "+model.Uri);
                     returnA.Add(model);
                     //list.Add(SetHighlighter(dicKeywords, model));
@@ -165,25 +167,8 @@ namespace Web
         }
         
 
-        private string GetKeyWordsSplitBySpace(string keywords)
-        {
-            PanGuTokenizer ktTokenizer = new PanGuTokenizer();
-            StringBuilder result = new StringBuilder();
-            ICollection<WordInfo> words = ktTokenizer.SegmentToWordInfos(keywords);
-            foreach (WordInfo word in words)
-            {
-                if (word == null)
-                {
-                    continue;
-                }
-                result.AppendFormat("{0}^{1}.0 ", word.Word, (int)Math.Pow(3, word.Rank));
-            }
-            return result.ToString().Trim();
-        }
-
-
         //请求队列 解决索引目录同时操作的并发问题
-        private Queue<BookViewMode> bookQueue = new Queue<BookViewMode>();
+       
         /// <summary>
         /// 新增Books表信息时 添加邢增索引请求至队列
         /// </summary>
@@ -201,13 +186,7 @@ namespace Web
         /// 删除Books表信息时 添加删除索引请求至队列
         /// </summary>
         /// <param name="bid"></param>
-        public void Del(int bid)
-        {
-            BookViewMode bvm = new BookViewMode();
-            bvm.Id = bid;
-            bvm.IT = IndexType.Delete;
-            bookQueue.Enqueue(bvm);
-        }
+        
         /// <summary>
         /// 修改Books表信息时 添加修改索引(实质上是先删除原有索引 再新增修改后索引)请求至队列
         /// </summary>
@@ -222,26 +201,10 @@ namespace Web
         //    bookQueue.Enqueue(bvm);
         //}
 
-        public void StartNewThread()
-        {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(QueueToIndex));
-        }
+      
 
         //定义一个线程 将队列中的数据取出来 插入索引库中
-        private void QueueToIndex(object para)
-        {
-            while (true)
-            {
-                if (bookQueue.Count > 0)
-                {
-                    //CRUDIndex();
-                }
-                else
-                {
-                    Thread.Sleep(3000);
-                }
-            }
-        }
+       
         /// <summary>
         /// 更新索引库操作
         /// </summary>
@@ -291,37 +254,7 @@ namespace Web
         //        directory.Dispose();
         //    }
         //}
-        public class BookViewMode
-        {
-            public int Id
-            {
-                get;
-                set;
-            }
-            public string Title
-            {
-                get;
-                set;
-            }
-            public string Content
-            {
-                get;
-                set;
-            }
-            public IndexType IT
-            {
-                get;
-                set;
-            }
-        }
-        //操作类型枚举
-        public enum IndexType
-        {
-            Insert,
-            Modify,
-            Delete
-        }
-
+        
         public class Page
         {
             public Page(int size,int index)

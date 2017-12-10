@@ -11,7 +11,7 @@ namespace webUI
     public partial class WebForm1 : System.Web.UI.Page
     {
         IndexManager indexManger;
-        protected IList<Rec>
+        //protected IList<Rec>
         protected void Page_Load(object sender, EventArgs e)
         {
             indexManger = new IndexManager();

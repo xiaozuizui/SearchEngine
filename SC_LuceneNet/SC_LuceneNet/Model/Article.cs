@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Web.Model
+namespace SC_LuceneNet.Model
 {
-    class Record
+    public class Article
     {
-        
         public string Id
         {
             set;
@@ -26,11 +23,11 @@ namespace Web.Model
             set;
             get;
         }
-        //public string AddTime { get;  set; }
-        public string Uri { get; set; }
 
-      
-
-
+        public string AddTime
+        {
+            set;
+            get;
+        }
     }
 }
