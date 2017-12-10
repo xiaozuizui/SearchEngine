@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Web.Model
 {
-    class Record
+    public class Record
     {
         
         public string Id

@@ -71,8 +71,6 @@
     <Content Include="Dict\Synonym.txt" />
     <Content Include="Dict\Wildcard.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Index\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

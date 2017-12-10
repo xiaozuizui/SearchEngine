@@ -9,15 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Html2Article", "Html2Article\Html2Article.csproj", "{0EDCFCDB-08FC-43AE-B6BB-BAF8D6EDF61E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LittleSearch", "LittleSearch\LittleSearch.csproj", "{19204C9F-4025-412D-B854-AD8E9992C2A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LittleSearch", "LittleSearch\LittleSearch.csproj", "{19204C9F-4025-412D-B854-AD8E9992C2A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{4AE393FE-8298-4AA1-9F08-6D869A5A5EBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC_LuceneNet", "SC_LuceneNet\SC_LuceneNet.csproj", "{E9025BC5-D38B-4458-BA3D-0255BDF4465C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchWeb", "SearchWeb\SearchWeb.csproj", "{B8808746-CD10-4B9B-AC9B-CB2D8BF6F3FE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchApp", "SearchApp\SearchApp.csproj", "{57F53BD8-8850-45CD-8A3E-959AA1C7878B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SC_LuceneNet", "SC_LuceneNet\SC_LuceneNet.csproj", "{E9025BC5-D38B-4458-BA3D-0255BDF4465C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,18 +43,14 @@ Global
 		{4AE393FE-8298-4AA1-9F08-6D869A5A5EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AE393FE-8298-4AA1-9F08-6D869A5A5EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AE393FE-8298-4AA1-9F08-6D869A5A5EBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B8808746-CD10-4B9B-AC9B-CB2D8BF6F3FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8808746-CD10-4B9B-AC9B-CB2D8BF6F3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B8808746-CD10-4B9B-AC9B-CB2D8BF6F3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8808746-CD10-4B9B-AC9B-CB2D8BF6F3FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57F53BD8-8850-45CD-8A3E-959AA1C7878B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{57F53BD8-8850-45CD-8A3E-959AA1C7878B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57F53BD8-8850-45CD-8A3E-959AA1C7878B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57F53BD8-8850-45CD-8A3E-959AA1C7878B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9025BC5-D38B-4458-BA3D-0255BDF4465C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -34,8 +34,11 @@ namespace Spider
             try
             {
 
-         
+
                 webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
+            }
+            catch
+            { }
                 //Thread.Sleep(timeSpan);
                //ThreadPool
                 ContentStream = webResponse.GetResponseStream();
@@ -63,16 +66,13 @@ namespace Spider
                     }
           
                 }
-            }
-            catch
-            {
-              //  wm.request.Add(RequestUri, depth);
-                //System.Console.WriteLine("request fail "+RequestUri);
-            }
             webRequest.Abort();
             webResponse.Close();
-           
+
         }
+
+
+
 
         public string GetContent()
         {

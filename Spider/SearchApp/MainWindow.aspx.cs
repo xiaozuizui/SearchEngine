@@ -7,6 +7,9 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using GetArticle;
 using Web;
+using PanGu.HighLight;
+using PanGu;
+
 namespace SearchApp
 {
     public partial class MainWindow : System.Web.UI.Page
@@ -16,7 +19,7 @@ namespace SearchApp
         protected string txtTitle = string.Empty;
         protected string txtContent = string.Empty;
         protected long lSearchTime = 0;
-        protected IList<Article> list = new List<Article>();
+        protected List<Web.Model.Record> list = new List<Web.Model.Record>();
         protected string txtPageFoot = string.Empty;
         protected IndexManager indexManager;
 
@@ -42,9 +45,11 @@ namespace SearchApp
 
         private void SearchIndex()
         {
-            string st = "";
-            indexManager.SearchIndex(txtContent, new IndexManager.Page(10, 1), ref st);
+           
+            string s = Request.Form["content"].ToString();
+            indexManager.SearchIndex(s, new IndexManager.Page(PageSize,PageIndex) , list);
         }
+
         private int PageIndex
         {
             get
@@ -214,5 +219,9 @@ namespace SearchApp
                 }
             }
         }
+
+      
+
+
     }
 }

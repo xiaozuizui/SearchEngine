@@ -28,7 +28,6 @@ namespace SC_LuceneNet
         protected long lSearchTime = 0;
         protected IList<Article> list=new List<Article>();
         protected string txtPageFoot = string.Empty;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             //定义盘古分词的xml引用路径
@@ -51,7 +50,6 @@ namespace SC_LuceneNet
 
           RangeQuery query = new RangeQuery(new Term("time","20060101"), new Term("time","20060130"), true);
         }
-
 
         /// <summary>
         /// 创建索引

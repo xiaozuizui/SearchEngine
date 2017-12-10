@@ -107,7 +107,7 @@ namespace Spider
 
                     if (depth <= Depth)
                     {
-                        System.Console.WriteLine(uri);
+                        System.Console.WriteLine(uri+"      "+depth.ToString());
                         Request request = new Request(uri);
                         request.GenerateWebRequestAsync(this, depth, manager);//创建请求
                     }

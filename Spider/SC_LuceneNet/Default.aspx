@@ -15,8 +15,6 @@
         }
     </script>
 </head>
-
-
 <body>
     <form id="form1" runat="server" action="Default.aspx">
     <div>
@@ -30,6 +28,7 @@
         <input type="button" value="创建索引" onclick="doclick('CreateIndex')" />
             是否覆盖索引：<input type="radio" checked="checked" id="isCover" name="cover" value="1" /><label style="margin-right:2px;" for="isCover">是</label><input type="radio" id="notCover" name="Cover" value="0" /><label for="notCover">否</label>
     </div>
+
     <div>
     <table class="table_list cellpadding="0" cellspacing="0">
     <tbody>

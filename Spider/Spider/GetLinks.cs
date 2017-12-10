@@ -28,9 +28,42 @@ namespace Spider
             MatchCollection match = rg.Matches(webContent);
             for(int i=0;i<match.Count;i++)
             {
-                Links.Add(match[i].ToString());
+                string str = match[i].ToString();
+                IsLink(str);
+                   // Links.Add(str);
             }
             return Links;
+        }
+
+        void IsLink(string http)
+        {
+            int i1 = http.LastIndexOf(".");
+            int length = http.Length;
+            string hz = " ";
+
+            if(http[length-1] == '/')
+            {
+                http = new string(http.ToCharArray(0, length - 1));
+                length--;
+            }
+            
+           
+                hz = new string(http.ToCharArray(i1+1, length - i1 -1));
+           
+
+            if(hz == "jpg"|| hz == "gif"|| hz=="png"|| hz=="css"|| hz == "jsp"||hz =="jsf"||hz == "js")
+            {
+                return;
+            }
+            else
+            {
+                
+                Links.Add(http);
+            }
+           //  hz = new string(http.ToCharArray(i1, length - i1 ));
+            // string hz = new string(http.ToCharArray(i1, length - i1));
+    
+
         }
 
     }

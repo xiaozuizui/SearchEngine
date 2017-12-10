@@ -20,6 +20,7 @@ using Lucene.Net.QueryParsers;
 using Web.Model;
 using System.Diagnostics;
 using PanGu;
+using PanGu.HighLight;
 
 namespace Web
 {
@@ -68,29 +69,24 @@ namespace Web
 
         public void AddIndex(string title, string content, string uri)
         {
-            try
-            {
+           
                 Document doc = new Document();
                 doc.Add(new Field("Title", title, Field.Store.YES, Field.Index.ANALYZED));//存储且索引
                 doc.Add(new Field("Content", content, Field.Store.YES, Field.Index.ANALYZED));//存储且索引
                 //doc.Add(new Field("AddTime", date, Field.Store.YES, Field.Index.NOT_ANALYZED));//存储且索引
                 doc.Add(new Field("Uri", uri, Field.Store.YES, Field.Index.NOT_ANALYZED));
                 writer.AddDocument(doc);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                throw fnfe;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            
+          
         }
 
-        public void  SearchIndex(string st,Page pg, ref string re)
+        public void  SearchIndex(string keyword,Page pg,  List<Record> re)
         {
+
             Dictionary<string, string> dic = new Dictionary<string, string>();
             BooleanQuery bQuery = new BooleanQuery();
+            
+            string st = GetKeyWordsSplitBySpace(keyword);
             if (st != null && st != "")
             {
                 //title = GetKeyWordsSplitBySpace(Request.Form["title"].ToString());
@@ -123,48 +119,75 @@ namespace Web
             //}
             if (bQuery != null && bQuery.GetClauses().Length > 0)
             {
-                GetSearchResult(bQuery, dic,pg,ref re);
-            }
-        }
+              
+                //Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
+                IndexSearcher search = new IndexSearcher(Lu_IndexDic, true);
+                Stopwatch stopwatch = Stopwatch.StartNew();
 
-        private void GetSearchResult(BooleanQuery bQuery, Dictionary<string, string> dicKeywords,Page pg,ref string re)
-        {
-            List<Record> returnA = new List<Record>();
-            //Lucene.Net.Store.Directory ad = Lucene.Net.Store.FSDirectory.Open(new DirectoryInfo(IndexDic));
-            IndexSearcher search = new IndexSearcher(Lu_IndexDic, true);
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            Sort sort = new Sort(new SortField("Title", SortField.DOC, true));
-            TopDocs docs = search.Search(bQuery, (Filter)null, pg.PageSize * pg.PageIndex, sort);
-            stopwatch.Stop();
-            if (docs != null && docs.TotalHits > 0)
-            {
-                // lSearchTime = stopwatch.ElapsedMilliseconds;
-                //txtPageFoot = GetPageFoot(PageIndex, PageSize, docs.totalHits, "sabrosus");
-                for (int i = 0; i < docs.TotalHits; i++)
+                Sort sort = new Sort(new SortField("Title", SortField.DOC, true));
+                TopDocs docs = search.Search(bQuery, (Filter)null, pg.PageSize * pg.PageIndex, sort);
+                stopwatch.Stop();
+                if (docs != null && docs.TotalHits > 0)
                 {
-                    if (i >= (pg.PageIndex - 1) * pg.PageSize && i < pg.PageIndex * pg.PageSize)
+                    // lSearchTime = stopwatch.ElapsedMilliseconds;
+                    //txtPageFoot = GetPageFoot(PageIndex, PageSize, docs.totalHits, "sabrosus");
+                    for (int i = 0; i < docs.TotalHits; i++)
                     {
-                        Document doc = search.Doc(docs.ScoreDocs[i].Doc);
-                        Record model = new Record()
+                        if (i >= (pg.PageIndex - 1) * pg.PageSize && i < pg.PageIndex * pg.PageSize)
                         {
-                            Title = doc.Get("Title").ToString(),
-                            Content = doc.Get("Content").ToString(),
-                           // AddTime = doc.Get("AddTime").ToString(),
-                            Uri = doc.Get("Uri").ToString()
-                        };
-                        re += model.Title + "    " + model.Uri;
-                        Console.WriteLine(model.Title +"    "+model.Uri);
-                    returnA.Add(model);
-                    //list.Add(SetHighlighter(dicKeywords, model));
+                            Document doc = search.Doc(docs.ScoreDocs[i].Doc);
+                            Record model = new Record()
+                            {
+                                Title = doc.Get("Title").ToString(),
+                                Content = doc.Get("Content").ToString(),
+                                // AddTime = doc.Get("AddTime").ToString(),
+                                Uri = doc.Get("Uri").ToString()
+                            };
+                            // re += model.Title + "    " + model.Uri;
+                            Console.WriteLine(model.Title + "    " + model.Uri);
+                            re.Add(SetHighlighter(keyword,model));
+                            //list.Add(SetHighlighter(dicKeywords, model));
+                        }
                     }
                 }
             }
         }
-        
+
+
+        private string GetKeyWordsSplitBySpace(string keywords)
+        {
+            PanGuTokenizer ktTokenizer = new PanGuTokenizer();
+            StringBuilder result = new StringBuilder();
+            ICollection<WordInfo> words = ktTokenizer.SegmentToWordInfos(keywords);
+            foreach (WordInfo word in words)
+            {
+                if (word == null)
+                {
+                    continue;
+                }
+                result.AppendFormat("{0}^{1}.0 ", word.Word, (int)Math.Pow(3, word.Rank));
+            }
+            return result.ToString().Trim();
+        }
+
+        private Record SetHighlighter(string Keywords, Record model)
+        {
+            SimpleHTMLFormatter simpleHTMLFormatter = new PanGu.HighLight.SimpleHTMLFormatter("<font color=\"red\">", "</font>");
+            Highlighter highlighter = new PanGu.HighLight.Highlighter(simpleHTMLFormatter, new Segment());
+            highlighter.FragmentSize = 50;
+            // string strTitle = string.Empty;
+            //string strContent = string.Empty;
+            //dicKeywords.TryGetValue("title", out strTitle);
+            //dicKeywords.TryGetValue("content", out strContent);
+           // model.Title = highlighter.GetBestFragment(Keywords, model.Title);
+          
+            model.Content = highlighter.GetBestFragment(Keywords, model.Content);
+
+            return model;
+        }
 
         //请求队列 解决索引目录同时操作的并发问题
-       
+
         /// <summary>
         /// 新增Books表信息时 添加邢增索引请求至队列
         /// </summary>
@@ -182,7 +205,7 @@ namespace Web
         /// 删除Books表信息时 添加删除索引请求至队列
         /// </summary>
         /// <param name="bid"></param>
-        
+
         /// <summary>
         /// 修改Books表信息时 添加修改索引(实质上是先删除原有索引 再新增修改后索引)请求至队列
         /// </summary>
@@ -197,10 +220,10 @@ namespace Web
         //    bookQueue.Enqueue(bvm);
         //}
 
-      
+
 
         //定义一个线程 将队列中的数据取出来 插入索引库中
-       
+
         /// <summary>
         /// 更新索引库操作
         /// </summary>
@@ -250,7 +273,7 @@ namespace Web
         //        directory.Dispose();
         //    }
         //}
-        
+
         public class Page
         {
             public Page(int size,int index)
