@@ -18,13 +18,13 @@ namespace test
 
 
             string uri = "http://www.dlut.edu.cn/";
-            WorkManage wm = new WorkManage(4, 13, uri);
+            WorkManage wm = new WorkManage(4, 9, uri);
 
 
 #if debug
             wm.RunTaskAsync();
 
-            TimeSpan timeSpan = new TimeSpan(0, 0, 10);
+            TimeSpan timeSpan = new TimeSpan(0, 0, 20);
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             while (true)
@@ -52,6 +52,8 @@ namespace test
             //Thread.Sleep(5000);
 
             Console.WriteLine("doen");
+            Console.WriteLine(wm.sum);
+            Console.ReadLine();
             string st = " ";
             while (true)
             {

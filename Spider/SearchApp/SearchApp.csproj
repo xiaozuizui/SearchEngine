@@ -42,6 +42,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>true</IncludeIisSettings>
+    <FilesToIncludeForPublish>AllFilesInProjectFolder</FilesToIncludeForPublish>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -72,7 +74,56 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dict\Dict.dct" />
+    <Content Include="IndexDic\segments.gen" />
+    <Content Include="IndexDic\segments_1c" />
+    <Content Include="IndexDic\write.lock" />
+    <Content Include="IndexDic\_17.cfs" />
+    <Content Include="IndexDic\_18.cfs" />
+    <Content Include="IndexDic\_19.cfs" />
+    <Content Include="IndexDic\_1a.cfs" />
+    <Content Include="IndexDic\_1b.cfs" />
+    <Content Include="IndexDic\_1c.cfs" />
+    <Content Include="IndexDic\_1d.cfs" />
+    <Content Include="IndexDic\_1e.fdt" />
+    <Content Include="IndexDic\_1e.fdx" />
+    <Content Include="IndexDic\_1e.fnm" />
+    <Content Include="IndexDic\_1e.frq" />
+    <Content Include="IndexDic\_1e.nrm" />
+    <Content Include="IndexDic\_1e.prx" />
+    <Content Include="IndexDic\_1e.tii" />
+    <Content Include="IndexDic\_1e.tis" />
+    <Content Include="IndexDic\_1f.fdt" />
+    <Content Include="IndexDic\_1f.fdx" />
+    <Content Include="IndexDic\_a.fdt" />
+    <Content Include="IndexDic\_a.fdx" />
+    <Content Include="IndexDic\_a.fnm" />
+    <Content Include="IndexDic\_a.frq" />
+    <Content Include="IndexDic\_a.nrm" />
+    <Content Include="IndexDic\_a.prx" />
+    <Content Include="IndexDic\_a.tii" />
+    <Content Include="IndexDic\_a.tis" />
+    <Content Include="IndexDic\_m.fdt" />
+    <Content Include="IndexDic\_m.fdx" />
+    <Content Include="IndexDic\_m.fnm" />
+    <Content Include="IndexDic\_m.frq" />
+    <Content Include="IndexDic\_m.nrm" />
+    <Content Include="IndexDic\_m.prx" />
+    <Content Include="IndexDic\_m.tii" />
+    <Content Include="IndexDic\_m.tis" />
+    <Content Include="IndexDic\_w.fdt" />
+    <Content Include="IndexDic\_w.fdx" />
+    <Content Include="IndexDic\_w.fnm" />
+    <Content Include="IndexDic\_w.frq" />
+    <Content Include="IndexDic\_w.nrm" />
+    <Content Include="IndexDic\_w.prx" />
+    <Content Include="IndexDic\_w.tii" />
+    <Content Include="IndexDic\_w.tis" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -81,6 +132,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dict\ChsDoubleName1.txt" />
+    <Content Include="Dict\ChsDoubleName2.txt" />
+    <Content Include="Dict\ChsSingleName.txt" />
+    <Content Include="Dict\Stopword.txt" />
+    <Content Include="Dict\Synonym.txt" />
+    <Content Include="Dict\Wildcard.txt" />
     <Content Include="MainWindow.aspx" />
     <None Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
@@ -98,6 +155,11 @@
       <DependentUpon>MainWindow.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Html2Article\Html2Article.csproj">
@@ -108,6 +170,12 @@
       <Project>{4ae393fe-8298-4aa1-9f08-6d869a5a5ebb}</Project>
       <Name>Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

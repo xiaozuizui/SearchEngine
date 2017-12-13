@@ -24,23 +24,18 @@ namespace Spider
            // webRequest = new HttpWebRequest();
         }
 
-        public async Task GenerateWebRequestAsync(WorkManage wm,int depth,IndexManager indexmanager)
+        public async void GenerateWebRequestAsync(WorkManage wm,int depth,IndexManager indexmanager)
         {
             webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
             webRequest.Method = "GET";
             //webRequest.Timeout = 100;
            webRequest.KeepAlive = true;
-            webRequest.Timeout = 10;
+            webRequest.Timeout = 100;
             try
             {
 
 
                 webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
-            }
-            catch
-            { }
-                //Thread.Sleep(timeSpan);
-               //ThreadPool
                 ContentStream = webResponse.GetResponseStream();
                 string html = GetContent();
                 GetLinks getLinks = new GetLinks(html);
@@ -49,25 +44,35 @@ namespace Spider
                 Html2Article.Depth = 80;
                 article = Html2Article.GetArticle(html);
 
+                wm.sum++;
+                indexmanager.AddIndex(article.Title, article.Content, RequestUri);
 
-                indexmanager.AddIndex(article.Title, article.Content,  RequestUri);
 
-                
                 if (depth < wm.Depth)
                 {
 
-                    lock (wm.unfinisheduri)
-                    {
+                    
                         foreach (string uri in getLinks.GetUris())
                         {
-                            if (!wm.unfinisheduri.ContainsKey(uri))
+                        if (!wm.unfinisheduri.ContainsKey(uri))
+                            lock (wm.unfinisheduri)
+                            {
                                 wm.unfinisheduri.Add(uri, depth + 1);
+                            }
                         }
-                    }
-          
+                    
+
                 }
-            webRequest.Abort();
-            webResponse.Close();
+                webRequest.Abort();
+                webResponse.Close();
+            }
+            catch
+            {
+
+            }
+                //Thread.Sleep(timeSpan);
+               //ThreadPool
+                
 
         }
 

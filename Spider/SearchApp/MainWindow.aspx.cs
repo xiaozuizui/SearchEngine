@@ -21,13 +21,14 @@ namespace SearchApp
         protected long lSearchTime = 0;
         protected List<Web.Model.Record> list = new List<Web.Model.Record>();
         protected string txtPageFoot = string.Empty;
-        protected IndexManager indexManager;
-
-        protected string IndexDic
+        protected IndexManager indexManager; 
+       
+        protected  string IndexDic
         {
             get
             {
                 return Server.MapPath("/IndexDic");
+                //return "/IndexDic";
             }
         }
 
@@ -47,7 +48,11 @@ namespace SearchApp
         {
            
             string s = Request.Form["content"].ToString();
-            indexManager.SearchIndex(s, new IndexManager.Page(PageSize,PageIndex) , list);
+            int hits;
+            hits =  indexManager.SearchIndex(s, new IndexManager.Page(PageSize,PageIndex) , list);
+
+           // lSearchTime = stopwatch.ElapsedMilliseconds;
+            txtPageFoot = GetPageFoot(PageIndex, PageSize, hits, "sabrosus");
         }
 
         private int PageIndex

@@ -35,7 +35,7 @@
         </div>
 
         <div>
-            <table class="table_list cellpadding="0" cellspacing="0">
+            <table class="table_list" cellpadding="0" cellspacing="0">
     <tbody>
     <%
         if (list != null && list.Count > 0)

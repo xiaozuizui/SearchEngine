@@ -26,7 +26,7 @@ namespace Spider
 
         public bool DictionaryLock { get; set; }
         public int Depth { get; set; }
-        
+        public int sum;
 
        // public Html2Article Html2Article;
         public IndexManager manager;
@@ -35,7 +35,7 @@ namespace Spider
         {
             baseU = baseuri;
 
-
+            sum = 1;
             threads = new Thread[requestcount];
             WorkBusy = new bool[requestcount];
 
@@ -65,10 +65,11 @@ namespace Spider
             
         }
 
-        public async Task RunTaskAsync()
+        public void  RunTaskAsync()
         {
             Request request = new Request(baseU);
-            await request.GenerateWebRequestAsync(this, 1, manager);
+            request.GenerateWebRequestAsync(this, 1, manager);
+            Thread.Sleep(1000);
 
             for (int i=0;i<RequestCount;i++)
             {
@@ -87,33 +88,32 @@ namespace Spider
             int j = (int)i;
             while (true)
             {
-
-
-                lock (unfinisheduri)
-                {
                     if (unfinisheduri.Count == 0)
                     {
                         WorkBusy[j] = false;
-                        return;
+                        break;
                     }
-                        
-                    string uri = unfinisheduri.First().Key;
-                    int depth = unfinisheduri.First().Value;
 
+                string uri;
+                int depth;
+                lock (unfinisheduri)
+                {
+                    uri = unfinisheduri.First().Key;
+                    depth = unfinisheduri.First().Value;
                     unfinisheduri.Remove(uri);
-                    if (!finisheduri.ContainsKey(uri))
-                        finisheduri.Add(uri, depth);
-
-
-                    if (depth <= Depth)
-                    {
-                        System.Console.WriteLine(uri+"      "+depth.ToString());
-                        Request request = new Request(uri);
-                        request.GenerateWebRequestAsync(this, depth, manager);//创建请求
-                    }
                 }
-                    
-                
+
+                        if (!finisheduri.ContainsKey(uri))
+                            finisheduri.Add(uri, depth);
+
+                        //System.Console.WriteLine(uri + "      " + depth.ToString());
+                        if (depth <= Depth)
+                        {
+                            System.Console.WriteLine(uri+"      "+depth.ToString());
+
+                            Request request = new Request(uri);
+                            request.GenerateWebRequestAsync(this, depth, manager);//创建请求
+                        }
             }
         }
 

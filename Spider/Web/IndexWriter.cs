@@ -61,7 +61,7 @@ namespace Web
 
         public void SaveIndex()
         {
-            //writer.Optimize();
+            writer.Optimize();
           
             writer.Dispose();
         }
@@ -71,8 +71,12 @@ namespace Web
         {
            
                 Document doc = new Document();
-                doc.Add(new Field("Title", title, Field.Store.YES, Field.Index.ANALYZED));//存储且索引
-                doc.Add(new Field("Content", content, Field.Store.YES, Field.Index.ANALYZED));//存储且索引
+             Field temp = new Field("Title", title, Field.Store.YES, Field.Index.ANALYZED);
+            temp.Boost = 2;
+            doc.Add(temp);//存储且索引
+            temp = new Field("Content", content, Field.Store.YES, Field.Index.ANALYZED);
+            temp.Boost = 1.5f;
+            doc.Add(temp);//存储且索引
                 //doc.Add(new Field("AddTime", date, Field.Store.YES, Field.Index.NOT_ANALYZED));//存储且索引
                 doc.Add(new Field("Uri", uri, Field.Store.YES, Field.Index.NOT_ANALYZED));
                 writer.AddDocument(doc);
@@ -80,9 +84,9 @@ namespace Web
           
         }
 
-        public void  SearchIndex(string keyword,Page pg,  List<Record> re)
+        public int  SearchIndex(string keyword,Page pg,  List<Record> re)
         {
-
+            int tothit = 0;
             Dictionary<string, string> dic = new Dictionary<string, string>();
             BooleanQuery bQuery = new BooleanQuery();
             
@@ -131,6 +135,7 @@ namespace Web
                 {
                     // lSearchTime = stopwatch.ElapsedMilliseconds;
                     //txtPageFoot = GetPageFoot(PageIndex, PageSize, docs.totalHits, "sabrosus");
+                    tothit = docs.TotalHits;
                     for (int i = 0; i < docs.TotalHits; i++)
                     {
                         if (i >= (pg.PageIndex - 1) * pg.PageSize && i < pg.PageIndex * pg.PageSize)
@@ -151,6 +156,7 @@ namespace Web
                     }
                 }
             }
+            return tothit;
         }
 
 
