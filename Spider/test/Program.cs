@@ -24,25 +24,20 @@ namespace test
 #if debug
             wm.RunTaskAsync();
 
-            TimeSpan timeSpan = new TimeSpan(0, 0, 20);
-            Stopwatch stopwatch = new Stopwatch();
+            TimeSpan timeSpan = new TimeSpan(0, 0, 20);//设置一个固定时间（20s）
+            Stopwatch stopwatch = new Stopwatch();//设置一个计时器
             stopwatch.Start();
             while (true)
             {
-               
-               
                 if (stopwatch.Elapsed > timeSpan)
                 {
-                    wm.SaveIndex();
-                    stopwatch.Restart();
+                    wm.SaveIndex();//每隔一段时间就写入一次索引
+                    stopwatch.Restart();//重置计时器
                     stopwatch.Start();
-
-                    System.Console.WriteLine("writing ````````````````````````");
-                    if (wm.isFinished())
+                    System.Console.WriteLine("writing ");
+                    if (wm.isFinished())//判断任务是否结束
                         break;
-
                 }
-
             }
 #endif
 

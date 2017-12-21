@@ -166,10 +166,6 @@
       <Project>{0edcfcdb-08fc-43ae-b6bb-baf8d6edf61e}</Project>
       <Name>Html2Article</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Web\Web.csproj">
-      <Project>{4ae393fe-8298-4aa1-9f08-6d869a5a5ebb}</Project>
-      <Name>Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

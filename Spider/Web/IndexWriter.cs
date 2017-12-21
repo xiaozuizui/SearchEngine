@@ -52,7 +52,7 @@ namespace Web
 
        
 
-        public void SetIndexWriter(bool isCreate)
+        public void SetIndexWriter(bool isCreate)//isCreat 是否覆盖以前的索引
         {
             writer = new IndexWriter(Lu_IndexDic, pgAnalyzer, isCreate, Lucene.Net.Index.IndexWriter.MaxFieldLength.LIMITED);
         }
@@ -70,16 +70,18 @@ namespace Web
         public void AddIndex(string title, string content, string uri)
         {
            
-                Document doc = new Document();
-             Field temp = new Field("Title", title, Field.Store.YES, Field.Index.ANALYZED);
-            temp.Boost = 2;
+            Document doc = new Document();//实例化一个新文档
+
+            Field temp = new Field("Title", title, Field.Store.YES, Field.Index.ANALYZED);//Title域
+            temp.Boost = 2;//权重为2
             doc.Add(temp);//存储且索引
-            temp = new Field("Content", content, Field.Store.YES, Field.Index.ANALYZED);
-            temp.Boost = 1.5f;
+
+            temp = new Field("Content", content, Field.Store.YES, Field.Index.ANALYZED);//Content域
+            temp.Boost = 1.5f;//权重1.5
             doc.Add(temp);//存储且索引
-                //doc.Add(new Field("AddTime", date, Field.Store.YES, Field.Index.NOT_ANALYZED));//存储且索引
-                doc.Add(new Field("Uri", uri, Field.Store.YES, Field.Index.NOT_ANALYZED));
-                writer.AddDocument(doc);
+
+            doc.Add(new Field("Uri", uri, Field.Store.YES, Field.Index.NOT_ANALYZED));//Uri域储存但不索引
+            writer.AddDocument(doc);//写入索引
             
           
         }

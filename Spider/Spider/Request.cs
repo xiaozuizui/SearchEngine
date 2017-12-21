@@ -26,18 +26,17 @@ namespace Spider
 
         public async void GenerateWebRequestAsync(WorkManage wm,int depth,IndexManager indexmanager)
         {
-            webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);
-            webRequest.Method = "GET";
-            //webRequest.Timeout = 100;
-           webRequest.KeepAlive = true;
-            webRequest.Timeout = 100;
+            
             try
             {
+                webRequest = (HttpWebRequest)WebRequest.Create(RequestUri);//创建Request实例
+                webRequest.Method = "GET";//方法为GET
+                webRequest.KeepAlive = true;//持续型链接
+                webRequest.Timeout = 100;//超时值为100ms
 
-
-                webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();
-                ContentStream = webResponse.GetResponseStream();
-                string html = GetContent();
+                webResponse = (HttpWebResponse)await webRequest.GetResponseAsync();//获取当前请求的响应
+                ContentStream = webResponse.GetResponseStream();//获取响应的字节流
+                string html = GetContent();//转化为HTML文本
                 GetLinks getLinks = new GetLinks(html);
                 Article article = new Article();
                 Html2Article.AppendMode = false;

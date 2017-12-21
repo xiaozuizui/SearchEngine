@@ -68,12 +68,12 @@ namespace Spider
         public void  RunTaskAsync()
         {
             Request request = new Request(baseU);
-            request.GenerateWebRequestAsync(this, 1, manager);
+            request.GenerateWebRequestAsync(this, 1, manager);//首先获取baseUrl的链接
             Thread.Sleep(1000);
 
-            for (int i=0;i<RequestCount;i++)
+            for (int i=0;i<RequestCount;i++)//RequestCount为运行线程数量
             {
-                threads[i].Start(i);
+                threads[i].Start(i);//启动每个线程
             }
         }
 
@@ -83,49 +83,44 @@ namespace Spider
             //request.Clear();
         }
 
-        void GenerateWork(object i)
+        void GenerateWork(object i)//i为线程标识
         {
             int j = (int)i;
             while (true)
             {
-                    if (unfinisheduri.Count == 0)
-                    {
-                        WorkBusy[j] = false;
+                if (unfinisheduri.Count == 0)//查看是否有未抓取的URL
+                {
+                        WorkBusy[j] = false;//如果没有待抓取的URL，将当前线程状态设为空闲
                         break;
-                    }
-
+                }
                 string uri;
                 int depth;
-                lock (unfinisheduri)
+
+                lock (unfinisheduri)//先将容器上锁，从未抓取的URL中拿出URL
                 {
                     uri = unfinisheduri.First().Key;
                     depth = unfinisheduri.First().Value;
                     unfinisheduri.Remove(uri);
                 }
-
-                        if (!finisheduri.ContainsKey(uri))
-                            finisheduri.Add(uri, depth);
-
-                        //System.Console.WriteLine(uri + "      " + depth.ToString());
-                        if (depth <= Depth)
-                        {
-                            System.Console.WriteLine(uri+"      "+depth.ToString());
-
-                            Request request = new Request(uri);
-                            request.GenerateWebRequestAsync(this, depth, manager);//创建请求
-                        }
+                if (!finisheduri.ContainsKey(uri))
+                    finisheduri.Add(uri, depth);
+                if (depth <= Depth)//拿出的URL的depth满足设置的值则发生Web请求
+                {
+                    System.Console.WriteLine(uri+"      "+depth.ToString());
+                    Request request = new Request(uri);
+                    request.GenerateWebRequestAsync(this, depth, manager);//创建请求
+                }
             }
         }
 
         public bool isFinished()
         {
-           
-                for(int i =0; i<RequestCount;i++)
-                {
-                    if (WorkBusy[i])
-                        return false;
-                }
-                return true;
+            for (int i = 0; i < RequestCount; i++)//每个线程工作状态都为空闲则完成
+            {
+                if (WorkBusy[i])
+                    return false;
+            }
+            return true;
             
         }
 
