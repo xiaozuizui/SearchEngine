@@ -17,14 +17,15 @@ namespace test
         {
 
 
-            string uri = "http://www.dlut.edu.cn/";
-            WorkManage wm = new WorkManage(4, 9, uri);
+            //string uri = "http://www.dlut.edu.cn/";
+            string uri  = "http://teach.dlut.edu.cn/";
+            WorkManage wm = new WorkManage(8, 12, uri);
 
 
 #if debug
             wm.RunTaskAsync();
 
-            TimeSpan timeSpan = new TimeSpan(0, 0, 20);//设置一个固定时间（20s）
+            TimeSpan timeSpan = new TimeSpan(0, 0, 2);//设置一个固定时间（20s）
             Stopwatch stopwatch = new Stopwatch();//设置一个计时器
             stopwatch.Start();
             while (true)

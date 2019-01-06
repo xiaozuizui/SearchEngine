@@ -27,7 +27,7 @@ namespace SearchApp
         {
             get
             {
-                return Server.MapPath("/IndexDic");
+                return Server.MapPath("/Index");
                 //return "/IndexDic";
             }
         }

@@ -69,7 +69,11 @@ namespace Spider
         {
             Request request = new Request(baseU);
             request.GenerateWebRequestAsync(this, 1, manager);//首先获取baseUrl的链接
-            Thread.Sleep(1000);
+            while (unfinisheduri.Count==0)
+            {
+                Thread.Sleep(1000);
+            }
+            
 
             for (int i=0;i<RequestCount;i++)//RequestCount为运行线程数量
             {
@@ -90,8 +94,15 @@ namespace Spider
             {
                 if (unfinisheduri.Count == 0)//查看是否有未抓取的URL
                 {
-                        WorkBusy[j] = false;//如果没有待抓取的URL，将当前线程状态设为空闲
-                        break;
+
+                    while (true)
+                    {
+                        Thread.Sleep(1000);
+                        if (unfinisheduri.Count != 0)
+                            break;
+                    }
+                        //WorkBusy[j] = false;//如果没有待抓取的URL，将当前线程状态设为空闲
+                        //break;
                 }
                 string uri;
                 int depth;
@@ -102,8 +113,13 @@ namespace Spider
                     depth = unfinisheduri.First().Value;
                     unfinisheduri.Remove(uri);
                 }
+
                 if (!finisheduri.ContainsKey(uri))
+                {
+                    System.Console.WriteLine(uri);
                     finisheduri.Add(uri, depth);
+                }
+
                 if (depth <= Depth)//拿出的URL的depth满足设置的值则发生Web请求
                 {
                     System.Console.WriteLine(uri+"      "+depth.ToString());
